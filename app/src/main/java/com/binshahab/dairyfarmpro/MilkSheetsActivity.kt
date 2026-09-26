@@ -17,7 +17,8 @@ class MilkSheetsActivity : Activity() {
     private lateinit var dateInput: EditText
     private lateinit var priceInput: EditText
     private lateinit var givenInput: EditText
-
+    private lateinit var summaryText: TextView
+   
     private val farmId = "default"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +80,20 @@ class MilkSheetsActivity : Activity() {
             android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
 
         root.addView(givenInput)
+        
+        summaryText = TextView(this)
+        summaryText.textSize = 16f
+        summaryText.setTextColor(Color.rgb(30, 30, 30))
+        summaryText.setPadding(20, 20, 20, 20)
+        summaryText.setBackgroundColor(Color.WHITE)
 
+        root.addView(
+        summaryText,
+        LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams.MATCH_PARENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT
+    )
+)
         val scroll = ScrollView(this)
 
         rowsLayout = LinearLayout(this)
@@ -201,7 +215,50 @@ class MilkSheetsActivity : Activity() {
             }
         }
     }
+        val morningTotal = records.sumOf {
+            it.morningKg
+        }
 
+        val eveningTotal = records.sumOf {
+            it.eveningKg
+        }
+
+        val producedTotal =
+            morningTotal + eveningTotal
+
+        val givenTotal =
+            givenInput.text.toString()
+                .toDoubleOrNull() ?: 0.0
+
+        val remainingTotal =
+            producedTotal - givenTotal
+
+        val price =
+            priceInput.text.toString()
+                .toDoubleOrNull() ?: 0.0
+
+        val milkValue =
+            remainingTotal * price
+
+        val mun =
+            (remainingTotal / 40).toInt()
+
+        val remainingKg =
+            remainingTotal - (mun * 40)
+
+        summaryText.text =
+            """
+            🔵 DAILY TOTAL
+
+            Morning | Evening | Total
+            Milk Produced | ${"%.3f".format(morningTotal)} kg | ${"%.3f".format(eveningTotal)} kg | ${"%.3f".format(producedTotal)} kg
+            Milk Given to Labour/Others | | | ${"%.3f".format(givenTotal)} kg
+            Milk Remaining | | | ${"%.3f".format(remainingTotal)} kg
+
+            Mun + kg / Price
+            ${mun} Mun ${"%.3f".format(remainingKg)} kg / Rs ${"%.2f".format(milkValue)}
+            """.trimIndent()
+            
     private fun addAnimalRow(
         animal: Animal,
         record: MilkRecord?
