@@ -385,7 +385,15 @@ class MilkSheetsActivity : Activity() {
                     ignoreCase = true
                 )
             } ?: continue
-
+            
+            if (
+     animal.status.equals("Sold", ignoreCase = true) ||
+     !animal.gender.equals("Female", ignoreCase = true) ||
+     !animal.isMilkProducing
+) {
+             continue
+}
+}
             val fields =
                 view.getChildAt(1) as? LinearLayout
                     ?: continue
