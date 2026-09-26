@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.graphics.Color
 import android.view.Gravity
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 
@@ -15,6 +16,7 @@ class MainActivity : Activity() {
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
         layout.gravity = Gravity.CENTER
+        layout.setPadding(40, 40, 40, 40)
         layout.setBackgroundColor(Color.WHITE)
 
         val title = TextView(this)
@@ -30,6 +32,28 @@ class MainActivity : Activity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
         )
+
+        val animalsButton = Button(this)
+        animalsButton.text = "Animals"
+        animalsButton.textSize = 18f
+
+        animalsButton.setOnClickListener {
+            startActivity(
+                android.content.Intent(
+                    this,
+                    AnimalsActivity::class.java
+                )
+            )
+        }
+
+        val buttonParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        buttonParams.topMargin = 40
+
+        layout.addView(animalsButton, buttonParams)
 
         setContentView(layout)
     }
