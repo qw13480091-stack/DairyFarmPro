@@ -80,8 +80,14 @@ class MilkSheetsActivity : Activity() {
             android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
 
         root.addView(givenInput)
-        
-        summaryText = TextView(this)
+
+        priceInput.setOnTextChanged {
+        updateDailySummary()
+}
+        givenInput.setOnTextChanged {
+        updateDailySummary()
+}  
+       summaryText = TextView(this)
         summaryText.textSize = 16f
         summaryText.setTextColor(Color.rgb(30, 30, 30))
         summaryText.setPadding(20, 20, 20, 20)
@@ -258,7 +264,74 @@ class MilkSheetsActivity : Activity() {
             Mun + kg / Price
             ${mun} Mun ${"%.3f".format(remainingKg)} kg / Rs ${"%.2f".format(milkValue)}
             """.trimIndent()
-            
+       
+    private fun updateDailySummary() {
+
+    var morningTotal = 0.0
+    var eveningTotal = 0.0
+
+    for (i in 1 until rowsLayout.childCount) {
+
+        val view = rowsLayout.getChildAt(i)
+
+        if (view !is LinearLayout) continue
+
+        val fields =
+            view.getChildAt(1) as? LinearLayout
+                ?: continue
+
+        val morning =
+            (fields.getChildAt(0) as? EditText)
+                ?.text.toString()
+                .toDoubleOrNull()
+                ?: 0.0
+
+        val evening =
+            (fields.getChildAt(1) as? EditText)
+                ?.text.toString()
+                .toDoubleOrNull()
+                ?: 0.0
+
+        morningTotal += morning
+        eveningTotal += evening
+    }
+
+    val producedTotal =
+        morningTotal + eveningTotal
+
+    val givenTotal =
+        givenInput.text.toString()
+            .toDoubleOrNull() ?: 0.0
+
+    val remainingTotal =
+        producedTotal - givenTotal
+
+    val price =
+        priceInput.text.toString()
+            .toDoubleOrNull() ?: 0.0
+
+    val milkValue =
+        remainingTotal * price
+
+    val mun =
+        (remainingTotal / 40).toInt()
+
+    val remainingKg =
+        remainingTotal - (mun * 40)
+
+    summaryText.text =
+        """
+        🔵 DAILY TOTAL
+
+        Morning | Evening | Total
+        Milk Produced | ${"%.3f".format(morningTotal)} kg | ${"%.3f".format(eveningTotal)} kg | ${"%.3f".format(producedTotal)} kg
+        Milk Given to Labour/Others | | | ${"%.3f".format(givenTotal)} kg
+        Milk Remaining | | | ${"%.3f".format(remainingTotal)} kg
+
+        Mun + kg / Price
+        ${mun} Mun ${"%.3f".format(remainingKg)} kg / Rs ${"%.2f".format(milkValue)}
+        """.trimIndent()
+} 
     private fun addAnimalRow(
         animal: Animal,
         record: MilkRecord?
@@ -386,12 +459,14 @@ card.setBackgroundColor(
         updateTotal()
 
         morning.setOnTextChanged {
-            updateTotal()
-        }
+        updateTotal()
+        updateDailySummary()
+}
 
         evening.setOnTextChanged {
-            updateTotal()
-        }
+        updateTotal()
+        updateDailySummary()
+}
 
         total.textSize = 16f
         total.setPadding(0, 8, 0, 4)
