@@ -218,6 +218,10 @@ class AnimalsActivity : Activity() {
         purchasePrice.setText(
             if (existing == null) "" else existing.purchasePrice.toString()
         )
+        val milkCheckBox = CheckBox(this)
+        milkCheckBox.text = "Giving Milk"
+        milkCheckBox.textSize = 16f
+        milkCheckBox.isChecked = existing?.isMilkProducing ?: false
 
         layout.addView(id)
         layout.addView(name)
@@ -228,6 +232,7 @@ class AnimalsActivity : Activity() {
         layout.addView(birthDate)
         layout.addView(purchaseDate)
         layout.addView(purchasePrice)
+        layout.addView(milkCheckBox)
 
         val dialog = AlertDialog.Builder(this)
             .setTitle(if (existing == null) "Add Animal" else "Edit Animal")
@@ -280,7 +285,8 @@ class AnimalsActivity : Activity() {
                     purchasePrice = price,
                     saleDate = existing?.saleDate ?: "",
                     salePrice = existing?.salePrice ?: 0.0,
-                    status = existing?.status ?: "Active"
+                    status = existing?.status ?: "Active",
+                    isMilkProducing = milkCheckBox.isChecked
                 )
 
                 val success = if (existing == null) {
