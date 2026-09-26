@@ -34,8 +34,8 @@ class AnimalRepository(context: Context) {
                         purchasePrice = item.optDouble("purchasePrice", 0.0),
                         saleDate = item.optString("saleDate"),
                         salePrice = item.optDouble("salePrice", 0.0),
-                        status = item.optString("status", "Active")
-                    )
+                        status = item.optString("status", "Active"),
+                        isMilkProducing = item.optBoolean("isMilkProducing", false)                  )
                 )
             }
         } catch (_: Exception) {
@@ -63,6 +63,7 @@ class AnimalRepository(context: Context) {
             item.put("saleDate", animal.saleDate)
             item.put("salePrice", animal.salePrice)
             item.put("status", animal.status)
+            item.put("isMilkProducing", animal.isMilkProducing)
 
             array.put(item)
         }
