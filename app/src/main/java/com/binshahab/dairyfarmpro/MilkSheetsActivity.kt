@@ -280,6 +280,8 @@ class MilkSheetsActivity : Activity() {
                 record.eveningKg.toString()
             }
         )
+        morning.isEnabled = !isSold
+        evening.isEnabled = !isSold
 
         fields.addView(
             morning,
