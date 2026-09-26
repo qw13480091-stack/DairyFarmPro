@@ -91,8 +91,12 @@ class AnimalsActivity : Activity() {
         val card = LinearLayout(this)
         card.orientation = LinearLayout.VERTICAL
         card.setPadding(20, 18, 20, 18)
-        card.setBackgroundColor(Color.WHITE)
-
+        card.setBackgroundColor(
+    if (animal.status.equals("Sold", ignoreCase = true))
+        Color.argb(45, 244, 67, 54)
+    else
+        Color.WHITE
+)
         val title = TextView(this)
         title.text = "${animal.id}  •  ${animal.name}"
         title.textSize = 19f
