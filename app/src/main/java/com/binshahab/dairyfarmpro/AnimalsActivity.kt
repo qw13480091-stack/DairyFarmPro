@@ -92,10 +92,18 @@ class AnimalsActivity : Activity() {
         card.orientation = LinearLayout.VERTICAL
         card.setPadding(20, 18, 20, 18)
         card.setBackgroundColor(
-    if (animal.status.equals("Sold", ignoreCase = true))
-        Color.argb(45, 244, 67, 54)
-    else
-        Color.WHITE
+    when {
+        animal.status.equals("Sold", ignoreCase = true) ->
+            Color.argb(45, 244, 67, 54)
+
+        animal.isMilkProducing &&
+            animal.gender.equals("Female", ignoreCase = true) &&
+            !animal.status.equals("Sold", ignoreCase = true) ->
+            Color.argb(45, 76, 175, 80)
+
+        else ->
+            Color.WHITE
+    }
 )
         val title = TextView(this)
         title.text = "${animal.id}  •  ${animal.name}"
