@@ -212,19 +212,28 @@ class MilkSheetsActivity : Activity() {
         card.setPadding(16, 14, 16, 14)
 
         val isSold =
-            animal.status.equals(
-                "Sold",
-                ignoreCase = true
-            )
+    animal.status.equals(
+        "Sold",
+        ignoreCase = true
+    )
 
-        card.setBackgroundColor(
-            if (isSold) {
-                Color.argb(45, 244, 67, 54)
-            } else {
-                Color.argb(45, 76, 175, 80)
-            }
-        )
+val isMilkProducing =
+    animal.isMilkProducing &&
+    animal.gender.equals("Female", ignoreCase = true) &&
+    !isSold
 
+card.setBackgroundColor(
+    when {
+        isSold ->
+            Color.argb(45, 244, 67, 54)
+
+        isMilkProducing ->
+            Color.argb(45, 76, 175, 80)
+
+        else ->
+            Color.WHITE
+    }
+)
         val title = TextView(this)
 
         title.text =
