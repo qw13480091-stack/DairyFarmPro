@@ -12,5 +12,6 @@ data class Animal(
     val purchasePrice: Double,
     var saleDate: String = "",
     var salePrice: Double = 0.0,
-    var status: String = "Active"
+    var status: String = "Active",
+    var isMilkProducing: Boolean = false
 )
