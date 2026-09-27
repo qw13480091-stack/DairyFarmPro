@@ -220,13 +220,39 @@ class MilkSheetsActivity : Activity() {
                 )
             }
         }
+                updateDailySummary()
     }
-        val morningTotal = records.sumOf {
-            it.morningKg
-        }
+            private fun updateDailySummary() {
 
-        val eveningTotal = records.sumOf {
-            it.eveningKg
+        var morningTotal = 0.0
+        var eveningTotal = 0.0
+
+        for (i in 1 until rowsLayout.childCount) {
+
+            val view = rowsLayout.getChildAt(i)
+
+            if (view !is LinearLayout) continue
+
+            val fields =
+                view.getChildAt(1) as? LinearLayout
+                    ?: continue
+
+            val morning =
+                (fields.getChildAt(0) as? EditText)
+                    ?.text
+                    ?.toString()
+                    ?.toDoubleOrNull()
+                    ?: 0.0
+
+            val evening =
+                (fields.getChildAt(1) as? EditText)
+                    ?.text
+                    ?.toString()
+                    ?.toDoubleOrNull()
+                    ?: 0.0
+
+            morningTotal += morning
+            eveningTotal += evening
         }
 
         val producedTotal =
@@ -234,14 +260,16 @@ class MilkSheetsActivity : Activity() {
 
         val givenTotal =
             givenInput.text.toString()
-                .toDoubleOrNull() ?: 0.0
+                .toDoubleOrNull()
+                ?: 0.0
 
         val remainingTotal =
             producedTotal - givenTotal
 
         val price =
             priceInput.text.toString()
-                .toDoubleOrNull() ?: 0.0
+                .toDoubleOrNull()
+                ?: 0.0
 
         val milkValue =
             remainingTotal * price
@@ -264,74 +292,7 @@ class MilkSheetsActivity : Activity() {
             Mun + kg / Price
             ${mun} Mun ${"%.3f".format(remainingKg)} kg / Rs ${"%.2f".format(milkValue)}
             """.trimIndent()
-       
-    private fun updateDailySummary() {
-
-    var morningTotal = 0.0
-    var eveningTotal = 0.0
-
-    for (i in 1 until rowsLayout.childCount) {
-
-        val view = rowsLayout.getChildAt(i)
-
-        if (view !is LinearLayout) continue
-
-        val fields =
-            view.getChildAt(1) as? LinearLayout
-                ?: continue
-
-        val morning =
-            (fields.getChildAt(0) as? EditText)
-                ?.text.toString()
-                .toDoubleOrNull()
-                ?: 0.0
-
-        val evening =
-            (fields.getChildAt(1) as? EditText)
-                ?.text.toString()
-                .toDoubleOrNull()
-                ?: 0.0
-
-        morningTotal += morning
-        eveningTotal += evening
     }
-
-    val producedTotal =
-        morningTotal + eveningTotal
-
-    val givenTotal =
-        givenInput.text.toString()
-            .toDoubleOrNull() ?: 0.0
-
-    val remainingTotal =
-        producedTotal - givenTotal
-
-    val price =
-        priceInput.text.toString()
-            .toDoubleOrNull() ?: 0.0
-
-    val milkValue =
-        remainingTotal * price
-
-    val mun =
-        (remainingTotal / 40).toInt()
-
-    val remainingKg =
-        remainingTotal - (mun * 40)
-
-    summaryText.text =
-        """
-        🔵 DAILY TOTAL
-
-        Morning | Evening | Total
-        Milk Produced | ${"%.3f".format(morningTotal)} kg | ${"%.3f".format(eveningTotal)} kg | ${"%.3f".format(producedTotal)} kg
-        Milk Given to Labour/Others | | | ${"%.3f".format(givenTotal)} kg
-        Milk Remaining | | | ${"%.3f".format(remainingTotal)} kg
-
-        Mun + kg / Price
-        ${mun} Mun ${"%.3f".format(remainingKg)} kg / Rs ${"%.2f".format(milkValue)}
-        """.trimIndent()
-} 
     private fun addAnimalRow(
         animal: Animal,
         record: MilkRecord?
@@ -534,7 +495,6 @@ card.setBackgroundColor(
 ) {
              continue
 }
-}
             val fields =
                 view.getChildAt(1) as? LinearLayout
                     ?: continue
@@ -590,103 +550,7 @@ card.setBackgroundColor(
 
         loadSheet()
     }
-  private fun updateDailySummary() {
-
-    var morningTotal = 0.0
-    var eveningTotal = 0.0
-
-    for (i in 0 until rowsLayout.childCount) {
-
-        val view = rowsLayout.getChildAt(i)
-
-        if (view !is LinearLayout) continue
-
-        if (view.tag == "DAILY_SUMMARY") continue
-
-        if (view.childCount < 2) continue
-
-        val fields =
-            view.getChildAt(1) as? LinearLayout
-                ?: continue
-
-        if (fields.childCount < 2) continue
-
-        val morning =
-            (fields.getChildAt(0) as? EditText)
-                ?.text
-                ?.toString()
-                ?.toDoubleOrNull()
-                ?: 0.0
-
-        val evening =
-            (fields.getChildAt(1) as? EditText)
-                ?.text
-                ?.toString()
-                ?.toDoubleOrNull()
-                ?: 0.0
-
-        morningTotal += morning
-        eveningTotal += evening
-    }
-
-    val totalMilk = morningTotal + eveningTotal
-
-    val given =
-        givenInput.text.toString()
-            .toDoubleOrNull()
-            ?: 0.0
-
-    val remaining = totalMilk - given
-
-    val price =
-        priceInput.text.toString()
-            .toDoubleOrNull()
-            ?: 0.0
-
-    val income = remaining * price
-
-    val mun = (remaining / 40).toInt()
-    val kg = remaining - (mun * 40)
-
-    var summary =
-        rowsLayout.findViewWithTag<TextView>("DAILY_SUMMARY")
-
-    if (summary == null) {
-
-        summary = TextView(this)
-
-        summary.tag = "DAILY_SUMMARY"
-
-        summary.textSize = 16f
-
-        summary.setPadding(
-            16,
-            20,
-            16,
-            20
-        )
-
-        summary.setTextColor(
-            Color.rgb(20, 90, 160)
-        )
-
-        rowsLayout.addView(summary)
-    }
-
-    summary.text =
-        "🔵 DAILY TOTAL\n\n" +
-        "Morning | Evening | Total\n" +
-        "Milk Produced | " +
-        "${morningTotal} kg | " +
-        "${eveningTotal} kg | " +
-        "${totalMilk} kg\n\n" +
-        "Milk Given to Labour/Others | " +
-        "${given} kg\n\n" +
-        "Milk Remaining | " +
-        "${remaining} kg\n\n" +
-        "Mun + kg / Price | " +
-        "${mun} Mun ${String.format(Locale.getDefault(), "%.3f", kg)} kg / Rs ${String.format(Locale.getDefault(), "%.2f", income)}"
-}
+      
     private fun EditText.setOnTextChanged(
         action: () -> Unit
     ) {
