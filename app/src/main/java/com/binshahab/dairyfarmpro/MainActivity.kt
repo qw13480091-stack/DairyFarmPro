@@ -113,9 +113,10 @@ class MainActivity : Activity() {
         }
 
         addMenuItem("Settings") {
-            drawer.visibility = View.GONE
-        }
-
+    startActivity(
+        Intent(this, SettingsActivity::class.java)
+    )
+}
         root.addView(
             drawer,
             LinearLayout.LayoutParams(
