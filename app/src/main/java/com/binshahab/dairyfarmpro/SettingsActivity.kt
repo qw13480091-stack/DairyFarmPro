@@ -24,7 +24,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 "dark" -> setTheme(android.R.style.Theme_Material_NoActionBar)
 "light" -> setTheme(android.R.style.Theme_Material_Light_NoActionBar)
 else -> setTheme(android.R.style.Theme_Material_Light_NoActionBar)
-
+}
     super.onCreate(savedInstanceState)
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
