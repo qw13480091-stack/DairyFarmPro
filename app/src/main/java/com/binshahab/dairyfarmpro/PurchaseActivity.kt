@@ -159,7 +159,27 @@ val animalRepository = AnimalRepository(this)
             sellerPhone = sellerPhoneInput.text.toString().trim(),
             notes = notesInput.text.toString().trim()
         )
+val animalRepository = AnimalRepository(this)
 
+val updatedAnimal = animal.copy(
+    purchaseDate = date,
+    purchasePrice = price
+)
+
+val updated = animalRepository.updateAnimal(
+    "default",
+    animal.id,
+    updatedAnimal
+)
+
+if (!updated) {
+    Toast.makeText(
+        this,
+        "Could not update animal purchase details",
+        Toast.LENGTH_SHORT
+    ).show()
+    return
+}
         PurchaseRepository.add(this, purchase)
 
         Toast.makeText(
