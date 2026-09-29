@@ -19,11 +19,13 @@ class PurchaseActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+val animalRepository = AnimalRepository(this)
 
-        animals = AnimalRepository.getAll(this)
-            .filter { !it.status.equals("Sold", ignoreCase = true) }
-            .toMutableList()
-
+ animals = animalRepository.getAnimals("default")
+    .filter { !it.status.equals("Sold", ignoreCase = true) }
+    .toMutableList()
+    
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(30, 30, 30, 30)
