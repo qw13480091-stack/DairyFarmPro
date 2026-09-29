@@ -20,11 +20,10 @@ override fun onCreate(savedInstanceState: Bundle?) {
     val prefs = getSharedPreferences(prefsName, Context.MODE_PRIVATE)
     val selectedTheme = prefs.getString(themeKey, "system")
 
-    when (selectedTheme) {
-        "dark" -> setTheme(android.R.style.Theme.Material.NoActionBar)
-        "light" -> setTheme(android.R.style.Theme.Material.Light.NoActionBar)
-        else -> setTheme(android.R.style.Theme.Material.Light.NoActionBar)
-    }
+    when (selectedTheme) { 
+"dark" -> setTheme(android.R.style.Theme_Material_NoActionBar)
+"light" -> setTheme(android.R.style.Theme_Material_Light_NoActionBar)
+else -> setTheme(android.R.style.Theme_Material_Light_NoActionBar)
 
     super.onCreate(savedInstanceState)
         val layout = LinearLayout(this)
