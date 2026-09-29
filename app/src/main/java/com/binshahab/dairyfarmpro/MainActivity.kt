@@ -78,6 +78,30 @@ layout.addView(
     milkSheetsButton,
     milkButtonParams
 )
+val animalSalesButton = Button(this)
+animalSalesButton.text = "Animal Sales"
+animalSalesButton.textSize = 18f
+
+animalSalesButton.setOnClickListener {
+    startActivity(
+        android.content.Intent(
+            this,
+            AnimalSalesActivity::class.java
+        )
+    )
+}
+
+val salesButtonParams = LinearLayout.LayoutParams(
+    LinearLayout.LayoutParams.MATCH_PARENT,
+    LinearLayout.LayoutParams.WRAP_CONTENT
+)
+
+salesButtonParams.topMargin = 20
+
+layout.addView(
+    animalSalesButton,
+    salesButtonParams
+)
         setContentView(layout)
     }
 }
