@@ -102,6 +102,30 @@ layout.addView(
     animalSalesButton,
     salesButtonParams
 )
+val purchaseButton = Button(this)
+purchaseButton.text = "Purchase"
+purchaseButton.textSize = 18f
+
+purchaseButton.setOnClickListener {
+    startActivity(
+        android.content.Intent(
+            this,
+            PurchaseActivity::class.java
+        )
+    )
+}
+
+val purchaseButtonParams = LinearLayout.LayoutParams(
+    LinearLayout.LayoutParams.MATCH_PARENT,
+    LinearLayout.LayoutParams.WRAP_CONTENT
+)
+
+purchaseButtonParams.topMargin = 20
+
+layout.addView(
+    purchaseButton,
+    purchaseButtonParams
+)
         setContentView(layout)
     }
 }
