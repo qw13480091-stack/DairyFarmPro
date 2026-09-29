@@ -14,11 +14,19 @@ class SettingsActivity : Activity() {
     private val prefsName = "dairyfarmpro_settings"
     private val themeKey = "theme"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  
+override fun onCreate(savedInstanceState: Bundle?) {
 
-        val prefs = getSharedPreferences(prefsName, Context.MODE_PRIVATE)
+    val prefs = getSharedPreferences(prefsName, Context.MODE_PRIVATE)
+    val selectedTheme = prefs.getString(themeKey, "system")
 
+    when (selectedTheme) {
+        "dark" -> setTheme(android.R.style.Theme.Material.NoActionBar)
+        "light" -> setTheme(android.R.style.Theme.Material.Light.NoActionBar)
+        else -> setTheme(android.R.style.Theme.Material.Light.NoActionBar)
+    }
+
+    super.onCreate(savedInstanceState)
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(30, 30, 30, 30)
@@ -52,6 +60,7 @@ class SettingsActivity : Activity() {
             prefs.edit()
                 .putString(themeKey, "light")
                 .apply()
+                recreate()
         }
 
         layout.addView(lightButton)
@@ -63,6 +72,7 @@ class SettingsActivity : Activity() {
             prefs.edit()
                 .putString(themeKey, "dark")
                 .apply()
+                recreate()
         }
 
         layout.addView(darkButton)
@@ -74,6 +84,7 @@ class SettingsActivity : Activity() {
             prefs.edit()
                 .putString(themeKey, "system")
                 .apply()
+                recreate()
         }
 
         layout.addView(systemButton)
