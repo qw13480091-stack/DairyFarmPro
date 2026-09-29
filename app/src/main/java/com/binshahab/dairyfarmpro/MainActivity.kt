@@ -2,6 +2,8 @@ package com.binshahab.dairyfarmpro
 
 import android.app.Activity
 import android.content.Intent
+import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
@@ -15,7 +17,32 @@ class MainActivity : Activity() {
     private lateinit var drawer: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val prefs = getSharedPreferences(
+    "dairyfarmpro_settings",
+    Context.MODE_PRIVATE
+)
+
+val selectedTheme = prefs.getString("theme", "system")
+
+val isDark = when (selectedTheme) {
+    "dark" -> true
+    "light" -> false
+    else -> {
+        (resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK) ==
+                Configuration.UI_MODE_NIGHT_YES
+    }
+}
+
+setTheme(
+    if (isDark) {
+        android.R.style.Theme_Material_NoActionBar
+    } else {
+        android.R.style.Theme_Material_Light_NoActionBar
+    }
+)
+
+super.onCreate(savedInstanceState)
 
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
@@ -32,7 +59,7 @@ class MainActivity : Activity() {
         menuButton.textSize = 24f
         menuButton.setTextColor(Color.WHITE)
         menuButton.setBackgroundColor(Color.TRANSPARENT)
-
+        
         topBar.addView(
             menuButton,
             LinearLayout.LayoutParams(
